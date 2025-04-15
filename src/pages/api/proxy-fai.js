@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   headers.set('X-Accel-Buffering', 'no'); // 禁用Nginx缓冲
   headers.set('Transfer-Encoding', 'chunked'); // 启用分块传输编码
 
-  const url = `https://pre-api.alitrip.alibaba.com/fai/ctstream001`;
+  const url = `https://api.alitrip.alibaba.com/fai/ctstream001`;
   const options = {
     headers: headers,
     method: method,

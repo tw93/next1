@@ -24,6 +24,10 @@ const nextConfig = {
         destination: "/api/proxy-fai?path=:slug*",
       },
       {
+        source: "/proxy-pre-fai/:slug*",
+        destination: "/api/proxy-pre-fai?path=:slug*",
+      },
+      {
         source: "/proxy-image/:slug*",
         destination: "https://images.unsplash.com/:slug*"
       },

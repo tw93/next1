@@ -27,7 +27,7 @@ export default async function handler(req, res) {
   path.shift();
   path = path.join("");
 
-  const url = `https://api.alitrip.alibaba.com/${path}`;
+  const url = `https://api.alitrip.alibaba.com/fai/${path}`;
 
   // Properly handle request body for POST requests
   let requestBody = null;

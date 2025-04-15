@@ -5,7 +5,6 @@ export default async function handler(req, res) {
     nextUrl: { pathname },
     method,
     headers,
-    body,
   } = req;
   headers.delete("host");
   headers.delete("referer");
@@ -15,15 +14,32 @@ export default async function handler(req, res) {
   path = path.join("");
 
   const url = `https://api.alitrip.alibaba.com/${path}`;
+
+  // Properly handle request body for POST requests
+  let requestBody = null;
+  if (method === 'POST') {
+    try {
+      requestBody = await req.text();
+    } catch (e) {
+      console.error('Error reading request body:', e);
+    }
+  }
+
   const options = {
     headers: {
       ...headers,
       'Accept-Encoding': 'identity'
     },
     method: method,
-    body: body,
+    body: requestBody,
     redirect: "follow",
   };
+
+  console.log(`Proxying ${method} request to: ${url}`);
+  if (requestBody) {
+    console.log(`Request body: ${requestBody.substring(0, 100)}${requestBody.length > 100 ? '...' : ''}`);
+  }
+
   const modifiedRequest = new Request(url, options);
   try {
     const response = await fetch(modifiedRequest);

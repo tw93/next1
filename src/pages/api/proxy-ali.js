@@ -6,6 +6,20 @@ export default async function handler(req, res) {
     method,
     headers,
   } = req;
+
+  // Handle OPTIONS preflight requests
+  if (method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+        'Access-Control-Max-Age': '86400', // 24 hours
+      },
+    });
+  }
+
   headers.delete("host");
   headers.delete("referer");
 
@@ -45,8 +59,10 @@ export default async function handler(req, res) {
     const response = await fetch(modifiedRequest);
     const modifiedResponse = new Response(response.body, response);
 
-    // Add necessary headers for streaming responses
+    // Add necessary headers for streaming responses and CORS
     modifiedResponse.headers.set("Access-Control-Allow-Origin", "*");
+    modifiedResponse.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    modifiedResponse.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
     modifiedResponse.headers.set("Accept", "text/event-stream");
     modifiedResponse.headers.set("Cache-Control", "no-cache");
     modifiedResponse.headers.set("Connection", "keep-alive");
@@ -61,7 +77,9 @@ export default async function handler(req, res) {
       status: 500,
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"
       }
     });
   }

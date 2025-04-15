@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const { method, headers, body } = req;
   headers.delete('host');
   headers.delete('referer');
-  headers.delete('accept-encoding');
+  headers.set('Accept-Encoding', 'identity');
 
   const url = `https://pre-api.alitrip.alibaba.com/fai/ctstream001`;
   const options = {

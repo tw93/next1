@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     keepalive: true, // 保持连接
     cache: 'no-store', // 禁用缓存
     // 添加超时控制
-    signal: AbortSignal.timeout(25000), // 25秒超时
+    signal: AbortSignal.timeout(250000), // 250秒超时
   };
   const modifiedRequest = new Request(url, options);
   try {

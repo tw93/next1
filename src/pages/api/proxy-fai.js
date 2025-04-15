@@ -24,12 +24,32 @@ export default async function handler(req, res) {
     // 添加fetch选项以优化连接
     keepalive: true, // 保持连接
     cache: 'no-store', // 禁用缓存
+    // 添加超时控制
+    signal: AbortSignal.timeout(25000), // 25秒超时
   };
   const modifiedRequest = new Request(url, options);
   try {
     const response = await fetch(modifiedRequest);
+
+    // 如果响应不成功，返回错误
+    if (!response.ok) {
+      return new Response(JSON.stringify({ error: 'Upstream server error' }), {
+        status: response.status,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     return new Response(response.body, response);
   } catch (e) {
-    console.log('catch: ', e);
+    console.log('Error:', e);
+    // 返回更详细的错误信息
+    return new Response(JSON.stringify({
+      error: 'Request failed',
+      message: e.message,
+      type: e.name
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }

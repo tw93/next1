@@ -40,10 +40,7 @@ export default async function handler(req, res) {
   }
 
   const options = {
-    headers: {
-      ...headers,
-      'Accept-Encoding': 'identity'
-    },
+    headers: headers,
     method: method,
     body: requestBody,
     redirect: "follow",
@@ -66,9 +63,6 @@ export default async function handler(req, res) {
     modifiedResponse.headers.set("Accept", "text/event-stream");
     modifiedResponse.headers.set("Cache-Control", "no-cache");
     modifiedResponse.headers.set("Connection", "keep-alive");
-
-    // Set content encoding to empty to prevent compression
-    modifiedResponse.headers.set("Content-Encoding", "");
 
     return modifiedResponse;
   } catch (e) {
